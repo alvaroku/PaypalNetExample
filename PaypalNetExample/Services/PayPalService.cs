@@ -79,6 +79,20 @@ namespace PaypalNetExample.Services
                 Status = result.Status,
             };
         }
+        public async Task<GetOrderResponse> GetOrderDetailsAsync(string orderId)
+        {
+            var client = GetClient();
+
+            var request = new OrdersGetRequest(orderId);
+            var response = await client.Execute(request);
+            var result = response.Result<Order>();
+
+            return new GetOrderResponse
+            {
+                Id = result.Id,
+                Status = result.Status
+            };
+        }
     }
 
 }

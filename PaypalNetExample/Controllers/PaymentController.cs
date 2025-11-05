@@ -26,6 +26,13 @@ namespace PaypalNetExample.Controllers
             return Ok(result);
         }
 
+        [HttpGet("paypal/order/{id}")]
+        public async Task<IActionResult> GetOrder(string id)
+        {
+            var order = await _paypalService.GetOrderDetailsAsync(id);
+            return Ok(order);
+        }
+
         [HttpGet("paypal/cancel")]
         public IActionResult Cancel()
         {
