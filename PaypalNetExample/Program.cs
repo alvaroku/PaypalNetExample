@@ -1,7 +1,16 @@
+using PaypalNetExample.Services;
+using System.Net;
+
 var builder = WebApplication.CreateBuilder(args);
+ 
+
+ 
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddHttpClient();
+builder.Services.AddScoped<PayPalService>();
 
 var app = builder.Build();
 

@@ -1,8 +1,27 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@model PaypalClientData
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<script src="@Model.ClientUrl/sdk/js?client-id=@Model.ClientId&currency=@Model.Currency&locale=@Model.Locale"></script>
+
+<div id="paypal-button-container"></div>
+
+<script>
+    paypal.Buttons({
+        createOrder: function() {
+            return fetch('/Payment/Create?amount=500', { method: 'POST' })
+                .then(res => res.json())
+                .then(data => data.id);
+        },
+        onApprove: function(data) {
+            return fetch(`/paypal/success?token=${data.orderID}`)
+                .then(res => res.json())
+                .then(order => {
+                    if (order.status === 'COMPLETED') {
+                        alert('Pago completado con éxito');
+                    }
+                });
+        },
+        onCancel: function() {
+            alert('Pago cancelado');
+        }
+    }).render('#paypal-button-container');
+</script>

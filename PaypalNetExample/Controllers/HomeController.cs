@@ -4,18 +4,19 @@ using PaypalNetExample.Models;
 
 namespace PaypalNetExample.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController(ILogger<HomeController> _logger,IConfiguration configuration) : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
-
+ 
         public IActionResult Index()
         {
-            return View();
+            PaypalClientData data = new PaypalClientData
+            {
+                ClientId = configuration["PayPal:ClientId"],
+                Currency = configuration["PayPal:Currency"],
+                Locale = configuration["Paypal:Locale"],
+                ClientUrl = configuration["Paypal:ClientUrl"]
+            };
+            return View(data);
         }
 
         public IActionResult Privacy()
